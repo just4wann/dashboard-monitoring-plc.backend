@@ -1,12 +1,40 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller} from '@nestjs/common';
+import { EventsGateway } from './events/events.gateway';
+import { Ctx, MessagePattern, MqttContext, Payload } from '@nestjs/microservices'
+import { MachineInfo, ProductionInfo, TroubleMachine } from './types';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private websocketGateway: EventsGateway) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @MessagePattern('efficiencies')
+  getEfficiencies(@Payload() value: number, @Ctx() context: MqttContext) {
+    return this.websocketGateway.sendEfficiency(context.getTopic(), value);
   }
+
+  @MessagePattern('temperatures')
+  getTemperatures(@Payload() value: number, @Ctx() context: MqttContext) {
+    return this.websocketGateway.sendTemperature(context.getTopic(), value);
+  }
+
+  @MessagePattern('pressures')
+  getPressure(@Payload() value: number, @Ctx() context: MqttContext) {
+    return this.websocketGateway.sendPressure(context.getTopic(), value);
+  }
+
+  @MessagePattern('productions')
+  getProduction(@Payload() value: ProductionInfo, @Ctx() context: MqttContext) {
+    return this.websocketGateway.sendProduction(context.getTopic(), value);
+  }
+
+  @MessagePattern('machines')
+  getMachines(@Payload() value: MachineInfo, @Ctx() context: MqttContext) {
+    return this.websocketGateway.sendMachine(context.getTopic(), value)
+  }
+
+  @MessagePattern('troubles')
+  getTrouble(@Payload() value: TroubleMachine, @Ctx() context: MqttContext) {
+    return this.websocketGateway.sendTrouble(context.getTopic(), value);
+  }
+  
 }
