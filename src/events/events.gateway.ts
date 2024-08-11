@@ -1,6 +1,6 @@
 import { OnGatewayConnection, OnGatewayDisconnect, WebSocketGateway, WebSocketServer } from '@nestjs/websockets'
 import { Server } from 'socket.io'
-import { MachineInfo, ProductionInfo, TroubleMachine } from 'src/types';
+import { EfficiencyDto, MachineInfo, PressureDto, ProductionInfo, TemperatureDto, TroubleMachine } from 'src/types';
 
 @WebSocketGateway(80, {
     cors: {
@@ -21,15 +21,15 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         console.log('Client Disconnect');
     }
 
-    sendEfficiency(topic: string, value: number) {
+    sendEfficiency(topic: string, value: EfficiencyDto) {
         return this.server.emit(topic, value);
     }
 
-    sendTemperature(topic: string, value: number) {
+    sendTemperature(topic: string, value: TemperatureDto) {
         return this.server.emit(topic, value);
     }
 
-    sendPressure(topic: string, value: number) {
+    sendPressure(topic: string, value: PressureDto) {
         return this.server.emit(topic, value);
     }
 
