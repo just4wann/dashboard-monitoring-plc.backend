@@ -1,24 +1,26 @@
-import { Controller} from '@nestjs/common';
+import { Controller, UseInterceptors} from '@nestjs/common';
 import { EventsGateway } from './events/events.gateway';
 import { Ctx, MessagePattern, MqttContext, Payload } from '@nestjs/microservices'
-import { MachineInfo, ProductionInfo, TroubleMachine } from './types';
+import { EfficiencyDto, MachineInfo, ProductionInfo, TemperatureDto, PressureDto, TroubleMachine } from './types';
+import { TimeInterceptors } from './timestamp/timestamp.interceptor';
 
+@UseInterceptors(TimeInterceptors)
 @Controller()
 export class AppController {
   constructor(private websocketGateway: EventsGateway) {}
 
   @MessagePattern('efficiencies')
-  getEfficiencies(@Payload() value: number, @Ctx() context: MqttContext) {
+  getEfficiencies(@Payload() value: EfficiencyDto, @Ctx() context: MqttContext) {
     return this.websocketGateway.sendEfficiency(context.getTopic(), value);
   }
 
   @MessagePattern('temperatures')
-  getTemperatures(@Payload() value: number, @Ctx() context: MqttContext) {
+  getTemperatures(@Payload() value: TemperatureDto, @Ctx() context: MqttContext) {
     return this.websocketGateway.sendTemperature(context.getTopic(), value);
   }
 
   @MessagePattern('pressures')
-  getPressure(@Payload() value: number, @Ctx() context: MqttContext) {
+  getPressure(@Payload() value: PressureDto, @Ctx() context: MqttContext) {
     return this.websocketGateway.sendPressure(context.getTopic(), value);
   }
 
