@@ -11,7 +11,7 @@ import { EventModule } from './events/events.module';
         name: 'MQTT',
         transport: Transport.MQTT,
         options: {
-          url: 'http://broker.hivemq.com',
+          url: 'http://127.0.0.1',
           port: 1883
         }
       }
