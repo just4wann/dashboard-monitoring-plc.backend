@@ -7,10 +7,10 @@ async function bootstrap() {
   app.connectMicroservice({
     transport: Transport.MQTT,
     options: {
-      url: 'http://broker.beastnice.com',
+      url: 'http://localhost',
       port: 1883,
-      username: 'beastnicemqtt',
-      password: 'mqttbroker'
+      username: '',
+      password: ''
     }
   })
   app.startAllMicroservices();

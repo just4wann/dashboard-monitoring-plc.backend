@@ -11,10 +11,10 @@ import { EventModule } from './events/events.module';
         name: 'MQTT',
         transport: Transport.MQTT,
         options: {
-          url: 'http://broker.beastnice.com',
+          url: 'http://localhost',
           port: 1883,
-          username: 'beastnicemqtt',
-          password: 'mqttbroker'
+          username: '',
+          password: ''
         }
       }
     ]),
