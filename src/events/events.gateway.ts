@@ -2,7 +2,7 @@ import { OnGatewayConnection, OnGatewayDisconnect, WebSocketGateway, WebSocketSe
 import { Server } from 'socket.io'
 import { EfficiencyDto, MachineInfo, PressureDto, ProductionInfo, TemperatureDto, TroubleMachine } from 'src/types';
 
-@WebSocketGateway(80, {
+@WebSocketGateway(1885, {
     cors: {
         origin: '*'
     }

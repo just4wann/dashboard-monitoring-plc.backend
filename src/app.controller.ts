@@ -1,13 +1,23 @@
-import { Controller, UseInterceptors} from '@nestjs/common';
+import { Controller, Get, Res, UseInterceptors} from '@nestjs/common';
 import { EventsGateway } from './events/events.gateway';
 import { Ctx, MessagePattern, MqttContext, Payload } from '@nestjs/microservices'
 import { EfficiencyDto, MachineInfo, ProductionInfo, TemperatureDto, PressureDto, TroubleMachine } from './types';
 import { TimeInterceptors } from './timestamp/timestamp.interceptor';
+import { AppService } from './app.service';
+import { Response } from 'express';
 
 @UseInterceptors(TimeInterceptors)
 @Controller()
 export class AppController {
-  constructor(private websocketGateway: EventsGateway) {}
+  constructor(
+    private websocketGateway: EventsGateway,
+    private appService: AppService
+  ) {}
+
+  @Get('/')
+  welcome(@Res() response: Response): Response {
+    return response.status(200).send(this.appService.getWelcome())
+  }
 
   @MessagePattern('efficiencies')
   getEfficiencies(@Payload() value: EfficiencyDto, @Ctx() context: MqttContext) {
